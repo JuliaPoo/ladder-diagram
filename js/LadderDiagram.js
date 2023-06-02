@@ -18,25 +18,25 @@ class LadderDiagram {
 
     /**
      * Constructor
-     * @param {HTMLElement} dom_parent - DOM element where the diagram will be made a child of
+     * @param {HTMLElement} dom_parent -- parent element for dispatching events and getting em_size, but not mutated!
      * @param {Circuit} circuit - Circuit to generate diagram of
      * @param {("Corners" | "Sides")} [box_style="Corners"] - Select which box styling to use
      * @param {boolean} [_subgraph=false] - Internal use 
      */
     constructor(dom_parent, circuit, box_style="Corners", _subgraph = false) {
+        this.em_size = parseFloat(getComputedStyle(dom_parent).fontSize)
+        this.dom_parent = dom_parent
 
         if (circuit.type == 'BoolVar') {
             circuit = new AnyQuantifier(children = [circuit])
         }
+
         this.box_style = box_style
         this.graph_type = circuit.type
         this.is_subgraph = _subgraph
 
-        this.dom_parent = dom_parent
-
         this.dom_diagram = document.createElement("div")
         this.dom_diagram.classList.add(_subgraph ? "ladder-diagram-subgraph" : "ladder-diagram")
-        this.dom_parent.appendChild(this.dom_diagram)
 
         if (circuit.header) {
             this.dom_header = document.createElement("div")
@@ -55,7 +55,6 @@ class LadderDiagram {
 
         this.circuit = circuit
         this._init_grid()
-        this.em_size = parseFloat(getComputedStyle(this.dom_parent).fontSize)
 
         this.ctx = this._init_drawing_ctx()
         this._init_lines()
@@ -128,6 +127,22 @@ class LadderDiagram {
                 + "Expected: null | 'U' | 'T' | 'F'. Got "
                 + `${truthval}`)
         }
+
+        // when the user clicks the diagram, we want to cycle the values;
+        // we inform the parent Vue component that a certain element has been clicked.
+        // the LadderDiagram.vue component does the rest using a ladderEventHandler.
+        let that = this
+        internal.addEventListener("click", function(e) {
+            // console.log(`textNode eventListener click on ${JSON.stringify(circuit, null, 2)} handling event ${JSON.stringify(e,null,2)}; and firing ladderEvent event against ${that.dom_parent}`)
+            that.dom_parent.dispatchEvent(
+                new CustomEvent("ladderEvent", {
+                    bubbles: false,
+                    cancelable: true,
+                    detail: circuit.text // [TODO] replace this with circuit.id when we have that available.
+                })
+            );
+        });
+        
         return internal
     }
 
@@ -135,7 +150,9 @@ class LadderDiagram {
         let internal = this._create_empty_cell(x, y)
         internal.classList.add("ladder-diagram-box")
         internal.classList.add("ladder-diagram-box-subgraph")
-        return [internal, new LadderDiagram(internal, subcircuit, this.box_style, true)]
+        let subgraph = new LadderDiagram(this.dom_parent, subcircuit, this.box_style, true)
+        internal.appendChild(subgraph.dom_diagram)
+        return [internal, subgraph]
     }
 
     _init_grid() {
@@ -385,13 +402,6 @@ class LadderDiagram {
         return Boolean(this.get_truth_path())
     }
 
-    /**
-     * Removes itself from its parent node.
-     * @returns {void}
-     */
-    detach() {
-        this.dom_parent.removeChild(this.dom_diagram)
-    }
 }
 
 export { LadderDiagram }

@@ -69,42 +69,22 @@ window.data3 =
     ])
   ])
 
-window.diagram1 = new LadderDiagram(
-    document.getElementById("corners-test"),
-    data1
-)
+function myAttach(boxStyle, parentId, dataSource) {
+  let ld = new LadderDiagram( document.getElementById(parentId),
+                              dataSource,
+                              boxStyle )
+  document.getElementById(parentId).appendChild(ld.dom_diagram)
+  return ld
+}
 
-window.diagram2 = new LadderDiagram(
-    document.getElementById("corners-test"),
-    data2
-)
+window.diagram1 = myAttach("Corners", "corners-test", data1)
+window.diagram2 = myAttach("Corners", "corners-test", data2)
+window.diagram3 = myAttach("Corners", "corners-test", data3)
 
-// these truth values correspond to `Either (Maybe Bool) (Maybe Bool)`,
-// under an (id | Not) combinator
-window.diagram3 = new LadderDiagram(
-    document.getElementById("corners-test"),
-    data3,
-)
+window.diagram4 = myAttach("Sides", "sides-test", data1)
+window.diagram5 = myAttach("Sides", "sides-test", data2)
+window.diagram6 = myAttach("Sides", "sides-test", data3)
 
-window.diagram4 = new LadderDiagram(
-    document.getElementById("sides-test"),
-    data1,
-    "Sides"
-)
-
-window.diagram5 = new LadderDiagram(
-    document.getElementById("sides-test"),
-    data2,
-    "Sides"
-)
-
-// these truth values correspond to `Either (Maybe Bool) (Maybe Bool)`,
-// under an (id | Not) combinator
-window.diagram6 = new LadderDiagram(
-    document.getElementById("sides-test"),
-    data3,
-    "Sides"
-)
 
 
 </script>
