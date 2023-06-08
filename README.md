@@ -9,6 +9,10 @@ Available as:
 - [Github source](https://juliapoo.github.io/ladder-diagram/index.html)
 - [npm package](https://www.npmjs.com/package/ladder-diagram)
 
+Documentation:
+- [Explanation of notation](https://juliapoo.github.io/ladder-diagram/simpleTutorial.html)
+- [Reference](https://juliapoo.github.io/ladder-diagram/)
+
 For background, see:
 - [Specification in Google Drive](https://drive.google.com/drive/folders/1y7TssfA925VuyuAt8VBaNxlRTo8KyqlS?usp=sharing)
 - [Haskell version](https://github.com/smucclaw/dsl/tree/main/lib/haskell/anyall)
