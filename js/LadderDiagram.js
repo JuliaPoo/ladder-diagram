@@ -377,7 +377,7 @@ class LadderDiagram {
     /**
      * Attaches itself into a parent node
      * @param {HTMLElement} dom_parent - DOM element where the diagram will be made a child of
-     * @returns {void}
+     * @returns {LadderDiagram} - Updated ladder diagram
      */
     attach(dom_parent) {
 
@@ -417,6 +417,8 @@ class LadderDiagram {
         this._init_lines()
 
         this._init_events()
+
+        return this
     }
 }
 
