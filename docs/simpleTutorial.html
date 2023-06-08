@@ -1,0 +1,167 @@
+<html>
+<head>
+    <link rel="stylesheet" href="../css/ladder.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <title>The Ladder Diagram: A Quick Tutorial</title>
+</head>
+<body>
+<h1>The big idea</h1>
+
+The circuit diagram is an attempt to visualize propositional logic statements or Boolean circuits. On the web app, this diagram will update as the user provides more information. 
+
+<h1>Simple cases</h1>
+
+<p>That is, suppose you have a non-atomic proposition like \(\texttt{walk} \land \texttt{swim}\), where, e.g., \(\texttt{walk}\) corresponds to "the person walks" and \(\texttt{swim}\) corresponds to "the person swims".</p>
+
+<p>This is what the diagram will look like, before anything has been indicated about whether the person walks or swims — i.e., before any box on the form has been checked off.</p>
+
+<div id="walkNull_and_swimNull" style="font-size:1.5em;"></div>
+
+<p>There are two things to notice about this simple example.</p>
+
+<p>First, each of the propositions will be represented as a box.</p>
+
+<p>Second, note that the two boxes here are joined by a line. That's because you can make the whole proposition (\(\texttt{walk} \land \texttt{swim}\)) true by making both of its constituent parts &mdash; i.e., both (\texttt{walk}\) and \(\texttt{swim}\) &mdash; true.</p>
+
+<p>In general, there will be a path in the diagram for every assignment of truth values to the boolean variables that makes the whole proposition true. (This will become clearer in the more complicated examples below.) So, making the whole proposition true would correspond to finding a path through the circuit diagram.</p>
+    
+<h2>Suppose you indicate that the person walks...</h2>
+
+<div id="walkT_and_swimNull" style="font-size:1.5em;"></div>
+
+Then the left corner of the \(\texttt{walk}\) will turn green. 
+
+<h2>And if you indicate that the person <i>also</i> swims...</h2>
+
+<div id="walkT_and_swimT" style="font-size:1.5em;"></div>
+
+Then the left corner of \(\texttt{swim}\) will also turn green, and there will be a path going from the left to the right &mdash; a path corresponding to the assignment of values to the Boolean variables that makes the whole proposition true. More impressionistically: this visual shows how you can make the whole proposition true by making both (\texttt{walk}\) and \(\texttt{swim}\) true.
+
+
+<h2>But if you had indicated that the person walks but does <i>not</i> swim...</h2>
+
+<div id="walkT_and_swimF" style="font-size:1.5em;"></div>
+
+the bottom left corner of the \(\texttt{swim}\) box turns red instead.
+
+<h1>Ands and Ors</h1>
+
+So far we've just seen examples involving conjunction. But what about disjunctions? 
+
+<p>Here's what \(\texttt{walk} \vee \texttt{swim}\) looks like:</p>
+
+<div id="walkN_or_swimN" style="font-size:1.5em;"></div>
+
+<h1>More complicated examples</h1>
+
+Let's end with two more complicated examples.
+
+<p>Here's \( \texttt{walk} \land ( \texttt{sing} \vee \texttt{swim} ) \) (in prose: walks and (sings OR swims)):</p>
+
+<div id="walk_AND__sing_OR_swim" style="font-size:1.5em;"></div>
+
+<p>And here's \( \texttt{walk} \vee ( \texttt{sing} \land \texttt{swim} ) \) (in prose: walks OR (sings AND swims)):</p>
+
+<div id="walk_OR__sing_AND_swim" style="font-size:1.5em;"></div>
+
+<p>There's more that can be said, but this should be enough for you to start playing with the web app!</p>
+
+<script type="module">
+import { BoolVar, AllQuantifier, AnyQuantifier, LadderDiagram } from "../js/ladder.js"
+
+// BoolVar(text, isnegated, presetopt, knownopt)
+
+// --------- DATA ----------------------------------------
+
+// ---- SIMPLE DATA 
+
+window.walkNull_and_swimNull = new AllQuantifier([
+    new BoolVar("walk", false, null, null),
+    new BoolVar("swim", false, null, null),
+])
+
+
+window.walkT_and_swimT = new AllQuantifier([
+    new BoolVar("walk", false, null, 'T'),
+    new BoolVar("swim", false, null, 'T'),
+])
+
+window.walkT_and_swimNull = new AllQuantifier([
+    new BoolVar("walk", false, null, 'T'),
+    new BoolVar("swim", false, null, null),
+])
+
+
+// walk and NOT swim
+window.walkT_and_swimF = new AllQuantifier([
+    new BoolVar("walk", false, null, 'T'),
+    new BoolVar("swim", false, null, 'F'),
+])
+
+
+window.walkN_or_swimN = new AnyQuantifier([
+    new BoolVar("walk", false, null, null),
+    new BoolVar("swim", false, null, null),
+])
+
+window.walk_AND__sing_OR_swim = new AllQuantifier([
+    new BoolVar("walk", false, null, null),
+       new AnyQuantifier([
+            new BoolVar("swim", false, null, null),
+            new BoolVar("sing", false, null, null),
+        ])
+])
+
+
+window.walk_OR__sing_AND_swim = new AnyQuantifier([
+    new BoolVar("walk", false, null, null),
+       new AllQuantifier([
+            new BoolVar("swim", false, null, null),
+            new BoolVar("sing", false, null, null),
+        ])
+])
+
+
+// --------- THE DIAGRAMS ----------------------------------------
+
+window.diagram_walkNull_and_swimNull = new LadderDiagram(
+    document.getElementById("walkNull_and_swimNull"),
+    walkNull_and_swimNull
+)
+
+window.diagram_walkT_and_swimF = new LadderDiagram(
+    document.getElementById("walkT_and_swimNull"),
+    walkT_and_swimNull
+)
+
+window.diagram_walkT_and_swimT = new LadderDiagram(
+    document.getElementById("walkT_and_swimT"),
+    walkT_and_swimT
+)
+
+window.diagram_walkT_and_swimF = new LadderDiagram(
+    document.getElementById("walkT_and_swimF"),
+    walkT_and_swimF
+)
+
+window.diagram_walkN_or_swimN = new LadderDiagram(
+    document.getElementById("walkN_or_swimN"),
+    walkN_or_swimN
+)
+
+window.diagram_walk_AND__sing_OR_swim = new LadderDiagram(
+    document.getElementById("walk_AND__sing_OR_swim"),
+    walk_AND__sing_OR_swim
+)
+
+
+window.diagram_walk_OR__sing_AND_swim = new LadderDiagram(
+    document.getElementById("walk_OR__sing_AND_swim"),
+    walk_OR__sing_AND_swim
+)
+
+</script>
+</body>
+</html>
