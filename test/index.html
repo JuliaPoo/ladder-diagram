@@ -12,7 +12,10 @@
 
 <h1>Attach-Detach Test</h1>
 <div id="container1" style="max-width:500px;"></div>
-<div id="container2" style="max-width:250px;"></div>
+<div id="container2" style="max-width:740px;"></div>
+
+<h1>Layout Test</h1>
+<div id="layout-test" style="font-size:1em;"></div> 
 
 <script type="module">
 import { BoolVar, AllQuantifier, AnyQuantifier, LadderDiagram } from "../js/ladder.js"
@@ -73,6 +76,25 @@ window.data3 =
     ])
   ])
 
+const bigtext = "a ".repeat(100);
+window.data4 = 
+    new AllQuantifier([
+        new BoolVar(bigtext, false, null, null),
+        new AnyQuantifier([
+            new AllQuantifier([
+                new AnyQuantifier([
+                    new BoolVar(bigtext, false, null, null),
+                    new BoolVar(bigtext, false, null, null),
+                ]),
+                new AnyQuantifier([
+                    new BoolVar(bigtext, false, null, null),
+                    new BoolVar(bigtext, false, null, null),
+                ]),
+            ]),
+        new BoolVar(bigtext, false, null, null)
+    ])
+    ])
+
 window.diagram1 = new LadderDiagram(data1)
 window.diagram1.attach(document.getElementById("corners-test"))
 
@@ -104,6 +126,9 @@ window.diagram8 = new LadderDiagram(data2)
 diagram8.attach(document.getElementById("container2"))
 diagram8.detach()
 diagram8.attach(document.getElementById("container1"))
+
+window.diagram9 = new LadderDiagram(data4);
+diagram9.attach(document.getElementById("layout-test"))
 
 </script>
 </body>

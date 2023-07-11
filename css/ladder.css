@@ -26,6 +26,8 @@
     position: relative;
     overflow: hidden;
     font-size: inherit;
+
+    width: 100%;
 }
 
 .ladder-diagram-elements {
@@ -36,6 +38,11 @@
     align-items: var(--element-positioning);
     column-gap: 0.5em;
     row-gap: 0.5em;
+    justify-items: center;
+}
+
+.ladder-diagram-elements > .ladder-diagram-box {
+    min-width: 100%;
 }
 
 .ladder-diagram-header {
@@ -55,7 +62,9 @@
 
 .ladder-diagram-box-hidden {
     padding: 0;
-    width: 0;
+    width: 1em;
+    padding: 0;
+    margin: 0;
     justify-self: center;
 }
 

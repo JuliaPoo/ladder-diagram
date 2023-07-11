@@ -174,6 +174,8 @@ class LadderDiagram {
             .5 * pos1[0] + .5 * pos2[0], pos1[1],
             .5 * pos2[0] + .5 * pos1[0], pos2[1],
             pos2[0], pos2[1])
+        //this.ctx.lineTo(pos1[0], pos2[1])
+        //this.ctx.lineTo(pos2[0], pos2[1])
         this.ctx.stroke()
     }
 
